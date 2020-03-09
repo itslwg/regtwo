@@ -1,0 +1,125 @@
+% Created 2020-03-09 Mon 16:03
+% Intended LaTeX compiler: pdflatex
+\documentclass[11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{longtable}
+\usepackage{wrapfig}
+\usepackage{rotating}
+\usepackage[normalem]{ulem}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amssymb}
+\usepackage{capt-of}
+\usepackage{hyperref}
+\usepackage{minted}
+\usepackage[margin=1.25in]{geometry} \usepackage{booktabs} \usepackage{graphicx} \usepackage{adjustbox} \usepackage{amsmath} \usepackage{amsthm} \newtheorem{definition}{Definition} \usepackage{bookmark}
+\author{Ludde}
+\date{\today}
+\title{}
+\hypersetup{
+ pdfauthor={Ludde},
+ pdftitle={},
+ pdfkeywords={},
+ pdfsubject={},
+ pdfcreator={Emacs 26.2 (Org mode 9.1.14)}, 
+ pdflang={English}}
+\begin{document}
+
+\begin{titlepage}
+\centering
+\includegraphics[width=0.15\textwidth]{example-image-1x1}\par\vspace{1cm}
+{\scshape\LARGE Kungliga Tekniska Högskolan \par}
+\vspace{1cm}
+{\scshape\Large SF2930 Regression Analysis \par}
+\vspace{1.5cm}
+{\huge\bfseries Report II \\  \par}
+\vspace{2cm}
+{\Large\itshape Isac Karlsson \\ Ludvig Wärnberg Gerdin}
+\vfill
+Examiner \par
+\textsc{Tatjana Pavlenko}
+
+\vfill
+
+{\large \today\par}
+\end{titlepage}
+
+\newpage
+\tableofcontents
+\newpage
+
+\section{Introduction}
+\label{sec:org98daf89}
+\subsection{Background}
+\label{sec:orga14df41}
+Most of the tractors in Sweden have a third party liability insurance, because they are required by law. 
+In southern Europe a few large players have dominated the sales of tractor insurances. Our main task this
+project is to create our own tractor tariff on the form:
+
+\begin{equation}
+  \text{Price} = \gamma_0 \prod_{k = 1}^M \gamma_{k,i}  
+\end{equation}
+
+Here y0 corresponds to the base level and yki are the risk factors and corresponds to each individual 
+tractor. 
+
+\subsection{Data}
+\label{sec:org92878bd}
+
+If P\&C have provided us with data to train this price model, example given in the table below.
+
+\subsection{Problem description}
+\label{sec:org0d20bb8}
+\subsubsection{Risk Differentiation and Grouping}
+\label{sec:orgff1afec}
+
+Using GLM analysis we aim to make each group “Risk homogeneous” and that they contain enough data to
+get a stable GLM analysis, meanwhile handling imperfections in the dataset.
+
+\subsubsection{Levelling}
+\label{sec:org2434c16}
+
+Here we aim to calculate yo such that the forecasted claim costs for each insurance are covered by the
+the price for each insurance, on a full year basis. We us a ratio between the estimated claim cost and
+the total premium of 90\%. Lastly we calculate the base level yo from the formula given in (1).
+
+\section{Methods}
+\label{sec:orge528f3b}
+\subsection{Grouping and Risk Differentiation}
+\label{sec:org6ae7275}
+
+The criteria on which we based our groups were that
+
+\begin{enumerate}
+\item Each group should be risk homogeneous, and
+\item Each group should have enough data to make the GLM estimates stable.
+\end{enumerate}
+Greater emphasis were placed on fulfilling criteria 2) due to it being more concrete.
+In order to do that we considered cut-offs that placed a fairly equal shares of data in 
+each risk group. 
+
+The resulting cut-offs and risk groups are found in section \ref{sec:org898dae6}.
+
+\subsubsection{Levelling}
+\label{sec:org1383086}
+
+Firstly, we subset the data rows (or customers) that had a \texttt{RiskYear} 2016. That 
+way the GLM analysis were only conducted on the active customers. not those that weren't
+customers to If anymore. From the aggregated data, initialized as \texttt{glmdata2} in the
+provided script, we calculated the yearly claim-cost per tractor by dividing the summed duration
+in each duration by the corresponding summed claim cost in
+
+
+In pseudo-code, the process was 
+
+\begin{minted}[]{r}
+    for each 
+\end{minted}
+\section{Results}
+\label{sec:org898dae6}
+\section{Conclusion}
+\label{sec:org13e31d1}
+\end{document}
