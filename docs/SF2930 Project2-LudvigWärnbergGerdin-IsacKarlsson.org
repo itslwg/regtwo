@@ -52,32 +52,58 @@ Examiner \par
     the price for each insurance, on a full year basis. We us a ratio between the estimated claim cost and
     the total premium of 90%. Lastly we calculate the base level yo from the formula given in (1).
 
-* Methods
+* Methods and Methodological Considerations
 ** Grouping and Risk Differentiation
 
    The criteria on which we based our groups were that
 
    1) Each group should be risk homogeneous, and
    2) Each group should have enough data to make the GLM estimates stable.
-   Greater emphasis were placed on fulfilling criteria 2) due to it being more concrete.
-   In order to do that we considered cut-offs that placed a fairly equal shares of data in 
-   each risk group. 
+   Greater emphasis were placed on fulfilling criteria 2) due to it being more concrete. In order to do that
+   we considered cut-offs that placed a fairly equal shares of data in each risk group. 
+
+   In addition to the above, we adjusted the data slightly to adjust for some odd rows. For example, 
+   the tractors with a weight of 0 were placed in a category of its own. Also, we noticed the use 
+   of (Other) and Other as different factor levels for the ActivityCode regressor. These levels, however,
+   were left as they are. The rationale was that we assume a tractor with ActivityCode = Other and
+   ActivityCode = (Other) are mapped to more specific types of businesses internally by If. In a future version
+   of this model, the model could input more granular groups of ActivityCode to potentially improve 
+   the performance of the model.
 
    The resulting cut-offs and risk groups are found in section [[Results]].
    
-*** Levelling
+** Levelling
+   
+   From the results of section [[Grouping and Risk Differentiation]], we get risk factor estimates for each
+   level of each predictor. These are henceforth referred to as the "group factors".
+   
+   For each corresponding assignment presented under Levelling in the project description, we conducted the
+   following:
 
-    Firstly, we subset the data rows (or customers) that had a \texttt{RiskYear} 2016. That 
-    way the GLM analysis were only conducted on the active customers. not those that weren't
-    customers to If anymore. From the aggregated data, initialized as \texttt{glmdata2} in the
-    provided script, we calculated the yearly claim-cost per tractor by dividing the summed duration
-    in each duration by the corresponding summed claim cost in
+   1. From the original data, we selected those rows (or tractors) that had a \texttt{RiskYear} 2016. That 
+      way the GLM analysis were only conducted on the active customers, leaving out those that weren't 
+      customers to If anymore.
+
+      Following the GLM-script each row were aggregated to include one row per combination of variables. 
+      From the aggregated data, we calculated the expected yearly claim-cost per tractor by dividing the
+      duration by the corresponding claim cost for each row. The rationale was to enable us to analyse the 
+      yearly cost, even if the insurances had not been active for all of 2016.
+
+   2. 
 
 
-    In pseudo-code, the process was 
+   In pseudo-code, the process was 
 
-    #+begin_src R
-    for each 
-    #+end_src
+   #+begin_src R
+   for each 
+   #+end_src
+
 * Results
+** Grouping and Risk Differentiation
+   
+** Levelling
+  \input{../performance_table.tex}
+
+  \input{../risk_groups.tex}
+
 * Conclusion

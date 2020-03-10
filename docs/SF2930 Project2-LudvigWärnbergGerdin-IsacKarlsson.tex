@@ -1,4 +1,4 @@
-% Created 2020-03-09 Mon 16:03
+% Created 2020-03-10 Tue 13:46
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -52,9 +52,9 @@ Examiner \par
 \newpage
 
 \section{Introduction}
-\label{sec:org98daf89}
+\label{sec:org5b81261}
 \subsection{Background}
-\label{sec:orga14df41}
+\label{sec:org66de239}
 Most of the tractors in Sweden have a third party liability insurance, because they are required by law. 
 In southern Europe a few large players have dominated the sales of tractor insurances. Our main task this
 project is to create our own tractor tariff on the form:
@@ -67,29 +67,29 @@ Here y0 corresponds to the base level and yki are the risk factors and correspon
 tractor. 
 
 \subsection{Data}
-\label{sec:org92878bd}
+\label{sec:org821dc54}
 
 If P\&C have provided us with data to train this price model, example given in the table below.
 
 \subsection{Problem description}
-\label{sec:org0d20bb8}
+\label{sec:org408fb19}
 \subsubsection{Risk Differentiation and Grouping}
-\label{sec:orgff1afec}
+\label{sec:orgd4d9168}
 
 Using GLM analysis we aim to make each group “Risk homogeneous” and that they contain enough data to
 get a stable GLM analysis, meanwhile handling imperfections in the dataset.
 
 \subsubsection{Levelling}
-\label{sec:org2434c16}
+\label{sec:org00ad7b6}
 
 Here we aim to calculate yo such that the forecasted claim costs for each insurance are covered by the
 the price for each insurance, on a full year basis. We us a ratio between the estimated claim cost and
 the total premium of 90\%. Lastly we calculate the base level yo from the formula given in (1).
 
-\section{Methods}
-\label{sec:orge528f3b}
+\section{Methods and Methodological Considerations}
+\label{sec:org12395d3}
 \subsection{Grouping and Risk Differentiation}
-\label{sec:org6ae7275}
+\label{sec:orgc31a25a}
 
 The criteria on which we based our groups were that
 
@@ -97,29 +97,59 @@ The criteria on which we based our groups were that
 \item Each group should be risk homogeneous, and
 \item Each group should have enough data to make the GLM estimates stable.
 \end{enumerate}
-Greater emphasis were placed on fulfilling criteria 2) due to it being more concrete.
-In order to do that we considered cut-offs that placed a fairly equal shares of data in 
-each risk group. 
+Greater emphasis were placed on fulfilling criteria 2) due to it being more concrete. In order to do that
+we considered cut-offs that placed a fairly equal shares of data in each risk group. 
 
-The resulting cut-offs and risk groups are found in section \ref{sec:org898dae6}.
+In addition to the above, we adjusted the data slightly to adjust for some odd rows. For example, 
+the tractors with a weight of 0 were placed in a category of its own. Also, we noticed the use 
+of (Other) and Other as different factor levels for the ActivityCode regressor. These levels, however,
+were left as they are. The rationale was that we assume a tractor with ActivityCode = Other and
+ActivityCode = (Other) are mapped to more specific types of businesses internally by If. In a future version
+of this model, the model could input more granular groups of ActivityCode to potentially improve 
+the performance of the model.
 
-\subsubsection{Levelling}
-\label{sec:org1383086}
+The resulting cut-offs and risk groups are found in section \ref{sec:org73a0f29}.
 
-Firstly, we subset the data rows (or customers) that had a \texttt{RiskYear} 2016. That 
-way the GLM analysis were only conducted on the active customers. not those that weren't
-customers to If anymore. From the aggregated data, initialized as \texttt{glmdata2} in the
-provided script, we calculated the yearly claim-cost per tractor by dividing the summed duration
-in each duration by the corresponding summed claim cost in
+\subsection{Levelling}
+\label{sec:org82717ed}
+
+From the results of section \ref{sec:orgc31a25a}, we get risk factor estimates for each
+level of each predictor. These are henceforth referred to as the "group factors".
+
+For each corresponding assignment presented under Levelling in the project description, we conducted the
+following:
+
+\begin{enumerate}
+\item From the original data, we selected those rows (or tractors) that had a \texttt{RiskYear} 2016. That 
+way the GLM analysis were only conducted on the active customers, leaving out those that weren't 
+customers to If anymore.
+
+Following the GLM-script each row were aggregated to include one row per combination of variables. 
+From the aggregated data, we calculated the expected yearly claim-cost per tractor by dividing the
+duration by the corresponding claim cost for each row. The rationale was to enable us to analyse the 
+yearly cost, even if the insurances had not been active for all of 2016.
+
+\item 
+\end{enumerate}
 
 
 In pseudo-code, the process was 
 
 \begin{minted}[]{r}
-    for each 
+   for each 
 \end{minted}
+
 \section{Results}
-\label{sec:org898dae6}
+\label{sec:org73a0f29}
+\subsection{Grouping and Risk Differentiation}
+\label{sec:org1c88ca1}
+
+\subsection{Levelling}
+\label{sec:orga0f5b00}
+\input{../performance_table.tex}
+
+\input{../risk_groups.tex}
+
 \section{Conclusion}
-\label{sec:org13e31d1}
+\label{sec:orgc79e91f}
 \end{document}
