@@ -29,12 +29,13 @@ Examiner \par
   In southern Europe a few large players have dominated the sales of tractor insurances. Our main task this
   project is to create our own tractor tariff on the form:
   
+  #+NAME: eq:1
   \begin{equation}
     \text{Price} = \gamma_0 \prod_{k = 1}^M \gamma_{k,i}	
   \end{equation}
 
-  Here y0 corresponds to the base level and yki are the risk factors and corresponds to each individual 
-  tractor. 
+  Here \gamma_0 corresponds to the base level and $\gamma_{k,i}$ are the risk factors and corresponds to 
+  each individual tractor. 
 
 ** Data
 
@@ -55,12 +56,12 @@ Examiner \par
 * Methods and Methodological Considerations
 ** Grouping and Risk Differentiation
 
-   The criteria on which we based our groups were that
+   The criteria on which we based our grouping was
 
    1) Each group should be risk homogeneous, and
    2) Each group should have enough data to make the GLM estimates stable.
    Greater emphasis were placed on fulfilling criteria 2) due to it being more concrete. In order to do that
-   we considered cut-offs that placed a fairly equal shares of data in each risk group. 
+   we choose cut-offs that placed a fairly equal shares of data in each risk group. 
 
    In addition to the above, we adjusted the data slightly to adjust for some odd rows. For example, 
    the tractors with a weight of 0 were placed in a category of its own. Also, we noticed the use 
@@ -77,33 +78,45 @@ Examiner \par
    From the results of section [[Grouping and Risk Differentiation]], we get risk factor estimates for each
    level of each predictor. These are henceforth referred to as the "group factors".
    
-   For each corresponding assignment presented under Levelling in the project description, we conducted the
+   For each corresponding sub-assignment presented under Levelling in the project description, we conducted the
    following:
 
    1. From the original data, we selected those rows (or tractors) that had a \texttt{RiskYear} 2016. That 
       way the GLM analysis were only conducted on the active customers, leaving out those that weren't 
-      customers to If anymore.
+      customers to If in 2016.
 
       Following the GLM-script each row were aggregated to include one row per combination of variables. 
       From the aggregated data, we calculated the expected yearly claim-cost per tractor by dividing the
-      duration by the corresponding claim cost for each row. The rationale was to enable us to analyse the 
+      claim cost by the duration for each row. The rationale for this was to enable us to analyse the 
       yearly cost, even if the insurances had not been active for all of 2016.
 
-   2. 
+      The estimated claim for the coming year is then simply the sum of all of the estimated claim costs 
+      for each row in the aggregated data.
 
+   2. Recall that If has a ratio target of 0.9 between the estimated claim cost and the total premium, that is
 
-   In pseudo-code, the process was 
+      #+NAME: eq:2
+      \begin{equation}
+      \frac{\text{Total expected claim cost}}{\text{Total premiums}} = \frac{E[C_T]}{P_T} = 0.9 
+      \end{equation}
 
-   #+begin_src R
-   for each 
-   #+end_src
+      We have equation [[eq:1]] Using that we have an estimated value for the total expected claim cost, we reorder the equation to get
+      
+      \[
+      \frac{E[C_T]}{P_T} = 0.9 \iff \frac{E[C_T]}{0.9} = P_T
+      \]
+
+   3. Row by row in the aggregated data, we map the row characteristics to the corresponding risk factor 
+      in the group factor table, and subsequently take the product of all the risk factors 
+      to obtain the total risk factor for that row. In order to find the base level $\gamma_0$ in
 
 * Results
 ** Grouping and Risk Differentiation
-   
 ** Levelling
+
   \input{../performance_table.tex}
 
   \input{../risk_groups.tex}
 
 * Conclusion
+* Appendix A
