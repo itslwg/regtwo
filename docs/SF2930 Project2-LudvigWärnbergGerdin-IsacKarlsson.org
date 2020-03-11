@@ -154,8 +154,9 @@ Examiner \par
   we believe that we are missing the contextual dimensions needed to decide whether these should be counted 
   as wrong inputs in the dataset. In the end we decided to leave them in the data as a part of the
   group < 1000. An alternative would have been to include those rows as a separate level, however in that case the risk factor
-  corresponding to this level would have been inflated (since a claim on a small duration on would have resulted
-  in a predicted claim frequency), which is undesirable.
+  corresponding to this level would have been inflated (since tariff cells with low duration and one or two
+  claims would have resulted in a high predicted claim frequency, and therefore an inflated risk), which 
+  is undesirable.
    
   In the exploratory analysis of the data, we identified the use of "Other" as a factor level to ~ActivityCode~. 
   We assume that this level can be mapped to more specific types of businesses internally by If. In a future version
