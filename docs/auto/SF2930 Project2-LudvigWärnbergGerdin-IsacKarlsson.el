@@ -15,8 +15,8 @@
    (add-to-list 'LaTeX-verbatim-macros-with-delims-local "path")
    (TeX-run-style-hooks
     "latex2e"
-    "../performance_table"
     "../risk_groups"
+    "../performance_table"
     "article"
     "art11"
     "inputenc"
@@ -37,24 +37,25 @@
     "booktabs"
     "adjustbox"
     "amsthm"
-    "bookmark")
+    "bookmark"
+    "tabularx")
    (LaTeX-add-labels
-    "sec:orgd147064"
-    "sec:org969fd46"
-    "eq:orga73dda6"
-    "sec:org4c2573d"
-    "sec:org6c07e77"
-    "sec:org4c99e88"
-    "sec:orgea273d9"
-    "sec:org6a14cd5"
-    "sec:orgf85d4d6"
-    "sec:org7972a66"
-    "eq:orgd21207c"
-    "sec:org86e4e49"
-    "sec:org07cc061"
-    "sec:org798c682"
-    "sec:org692c048"
-    "sec:org495fb83")
+    "sec:org22b96bb"
+    "sec:org313190c"
+    "eq:org35c57d9"
+    "sec:orgf3e4d02"
+    "sec:orgd94dd07"
+    "sec:orgb2d8a15"
+    "sec:orga360034"
+    "sec:org7f03a32"
+    "sec:orgfdd43b7"
+    "sec:org9d5918c"
+    "eq:org1ef599b"
+    "eq:org9560e4e"
+    "eq:org94102db"
+    "eq:org90cf640"
+    "sec:org75bcc31"
+    "sec:org28364f7")
    (LaTeX-add-amsthm-newtheorems
     "definition"))
  :latex)

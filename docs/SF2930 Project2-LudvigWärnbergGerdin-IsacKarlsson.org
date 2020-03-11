@@ -1,5 +1,5 @@
 #+OPTIONS: toc:nil
-#+LATEX_HEADER: \usepackage[margin=1.25in]{geometry} \usepackage{booktabs} \usepackage{graphicx} \usepackage{adjustbox} \usepackage{amsmath} \usepackage{amsthm} \newtheorem{definition}{Definition} \usepackage{bookmark}
+#+LATEX_HEADER: \usepackage[margin=1.25in]{geometry} \usepackage{booktabs} \usepackage{graphicx} \usepackage{adjustbox} \usepackage{amsmath} \usepackage{amsthm} \newtheorem{definition}{Definition} \usepackage{bookmark} \usepackage{tabularx}
 \begin{titlepage}
 \centering
 \includegraphics[width=0.15\textwidth]{example-image-1x1}\par\vspace{1cm}
@@ -27,19 +27,34 @@ Examiner \par
 ** Background
   Most of the tractors in Sweden have a third party liability insurance, because they are required by law. 
   In southern Europe a few large players have dominated the sales of tractor insurances. Our main task this
-  project is to create our own tractor tariff on the form:
+  project is to create our own tractor tariff. The price $p_i$ for tariff cell $i$ is defined as
   
   #+NAME: eq:1
   \begin{equation}
-    \text{Price} = \gamma_0 \prod_{k = 1}^M \gamma_{k,i}	
+    p_i = \gamma_0 \prod_{k = 1}^M \gamma_{k,j}	
   \end{equation}
 
-  Here \gamma_0 corresponds to the base level and $\gamma_{k,i}$ are the risk factors and corresponds to 
-  each individual tractor. 
+  Here \gamma_0 corresponds to the base level and $\gamma_{k,j}$ are the risk factors for variable $k$ and 
+  variable group $j$. For example, letting the variable \texttt{VehicleAge} correspond to variable 
+  number $k = 1$ and letting a particular variable group $\texttt{VehicleAge} < 2$ correspond to $j = 2$, 
+  then the risk factor for the ~VehicleAge~ of a tractor that is 1 year old would be $\gamma_{12}$l
 
 ** Data
 
-   If P&C have provided us with data to train this price model, example given in the table below.
+   /If P&C/ have provided us with data to train this price model, example given in the Table 1.
+   
+   
+   #+BEGIN_table
+   #+LATEX: \caption{Data example}
+   #+LATEX: \centering
+   #+LATEX: \adjustbox{max width=\linewidth}{
+   #+ATTR_LATEX: :center nil :booktabs t :placement [h!]
+   | RiskYear | VehicleAge | Weight | Climate | ActivityCode | Duration | NoOfClaims | ClaimCost |
+   |----------+------------+--------+---------+--------------+----------+------------+-----------|
+   |     2010 |        009 |   3830 | North   | Construction |     0.63 |          1 |    627099 |
+   |     2008 |        001 |    400 | South   | Missing      |     0.59 |          1 |    253850 |
+   |   \vdots |     \vdots | \vdots | \vdots  | \vdots       |   \vdots |     \vdots |    \vdots |
+   #+END_table
 
 ** Problem description
 *** Risk Differentiation and Grouping
@@ -49,9 +64,9 @@ Examiner \par
 
 *** Levelling
 
-    Here we aim to calculate yo such that the forecasted claim costs for each insurance are covered by the
-    the price for each insurance, on a full year basis. We us a ratio between the estimated claim cost and
-    the total premium of 90%. Lastly we calculate the base level yo from the formula given in (1).
+    Here we aim to calculate $\gamma_0$ such that the forecasted claim costs for each insurance are covered by the
+    the price for each insurance on a full year basis. We use a ratio between the estimated claim cost and
+    the total premium of 90%. Lastly we calculate the base level $\gamma_0$ from the formula given in ([[eq:1]])
 
 * Methods and Methodological Considerations
 ** Grouping and Risk Differentiation
@@ -62,14 +77,6 @@ Examiner \par
    2) Each group should have enough data to make the GLM estimates stable.
    Greater emphasis were placed on fulfilling criteria 2) due to it being more concrete. In order to do that
    we choose cut-offs that placed a fairly equal shares of data in each risk group. 
-
-   In addition to the above, we adjusted the data slightly to adjust for some odd rows. For example, 
-   the tractors with a weight of 0 were placed in a category of its own. Also, we noticed the use 
-   of (Other) and Other as different factor levels for the ActivityCode regressor. These levels, however,
-   were left as they are. The rationale was that we assume a tractor with ActivityCode = Other and
-   ActivityCode = (Other) are mapped to more specific types of businesses internally by If. In a future version
-   of this model, the model could input more granular groups of ActivityCode to potentially improve 
-   the performance of the model.
 
    The resulting cut-offs and risk groups are found in section [[Results]].
    
@@ -83,40 +90,112 @@ Examiner \par
 
    1. From the original data, we selected those rows (or tractors) that had a \texttt{RiskYear} 2016. That 
       way the GLM analysis were only conducted on the active customers, leaving out those that weren't 
-      customers to If in 2016.
+      customers to If in 2016. 
 
-      Following the GLM-script each row were aggregated to include one row per combination of variables. 
-      From the aggregated data, we calculated the expected yearly claim-cost per tractor by dividing the
+      Following the GLM-script each row were aggregated to tariff cells.
+      From the aggregated data we calculated the expected yearly claim-cost per tariff cell by dividing the
       claim cost by the duration for each row. The rationale for this was to enable us to analyse the 
-      yearly cost, even if the insurances had not been active for all of 2016.
+      yearly cost, even if the insurances had not been active for all of 2016. 
 
-      The estimated claim for the coming year is then simply the sum of all of the estimated claim costs 
-      for each row in the aggregated data.
+      The estimated claim cost for the coming year is then simply the sum of all of the estimated yearly 
+      claim costs for each tariff cell.
 
-   2. Recall that If has a ratio target of 0.9 between the estimated claim cost and the total premium, that is
+   2. Recall first that the /If P&C/ has a ratio target of 0.9 between the estimated claim cost and the total premium.
+      Using that the total premium is $P = \sum_i p_i$, where $p_i$ is the premium or price for tariff cell $i$ defined 
+      in ([[eq:1]]), and the total expected yearly cost is $C = \sum_i c_i$, where $c_i$ is the expected yearly cost 
+      for tariff cell $i$, we get
 
       #+NAME: eq:2
       \begin{equation}
-      \frac{\text{Total expected claim cost}}{\text{Total premiums}} = \frac{E[C_T]}{P_T} = 0.9 
+	\frac{C}{P} = 0.9 
       \end{equation}
 
-      We have equation [[eq:1]] Using that we have an estimated value for the total expected claim cost, we reorder the equation to get
+      Using that we have an estimated value for the total expected claim cost, we reorder the equation to get
+      
+      #+NAME: eq:3
+      \begin{equation}
+      \frac{C}{P} = 0.9 \iff \frac{C}{0.9} = P
+      \end{equation}
+
+   3. The formula for the price of tariff cell $i$ is defined in ([[eq:1]]). As a reminder, this was
       
       \[
-      \frac{E[C_T]}{P_T} = 0.9 \iff \frac{E[C_T]}{0.9} = P_T
+      p_i = \gamma_0 \prod_{k = 1}^M \gamma_{k,j}
       \]
+   
+      Inserting ([[eq:1]]) into the formula for the total premium we get
 
-   3. Row by row in the aggregated data, we map the row characteristics to the corresponding risk factor 
-      in the group factor table, and subsequently take the product of all the risk factors 
-      to obtain the total risk factor for that row. In order to find the base level $\gamma_0$ in
+      #+NAME: eq:4
+      \begin{equation}
+      P = \sum_i p_i = \sum_i \bigg (\gamma_0 \prod_{k = 1}^M \gamma_{j,k} \bigg)_i =  \gamma_0 \sum_i \bigg ( \prod_{k = 1}^M \gamma_{j,k} \bigg)
+      \end{equation}
+      and subsequently inserting ([[eq:4]]) into ([[eq:3]]) and solving for $\gamma_0$ 
+
+      #+NAME: eq:5
+      \begin{equation}
+      \frac{C}{0.9} = \gamma_0 \sum_i \bigg ( \prod_{k = 1}^M \gamma_{j,k} \bigg) \implies \frac{C}{\sum_i \bigg ( \prod_{k = 1}^M \gamma_{j,k} \bigg)_i} = \gamma_0
+      \end{equation}
+
+      In other words: Row by row in the aggregated data, we map the row characteristics to the
+      corresponding risk factor  in the group factor table, and subsequently take the product of all 
+      the risk factors to obtain the total risk factor for that tariff cell. By ([[eq:5]]), we obtain the 
+      base level $\gamma_0$ by dividing the total expected cost by the sum of all total risk factors.
 
 * Results
-** Grouping and Risk Differentiation
-** Levelling
 
-  \input{../performance_table.tex}
+  We adjusted the data slightly to adjust for some odd rows. 
+  Moreover, the rows with where $\texttt{Duration} = 0$ were removed. Since we are interested in the tractors
+  that has been exposed to risk, and the tractors where $\texttt{Duration} = 0$ make up a small fraction
+  of the total data, we decided to remove these rows. 
+
+  We noted that some rows had suspiciously low values for the \texttt{Weight} predictor, e.g. a weight of 0. 
+  Since the fraction of rows with $\texttt{Weight} = 0$ were small (0.02%), removing the rows would not have
+  a large impact on the results. However, since many 
+  of these rows correspond to a particular ActivityCode (namely Middle H - Hotels and restaurants), 
+  we believe that we are missing the contextual dimensions needed to decide whether these should be counted 
+  as wrong inputs in the dataset. In the end we decided to leave them in the data as a part of the
+  group < 1000. An alternative would have been to include those rows as a separate level, however in that case the risk factor
+  corresponding to this level would have been inflated (since a claim on a small duration on would have resulted
+  in a predicted claim frequency), which is undesirable.
+   
+  As an other note we identified the use of Other as a factor level to ~ActivityCode~. We assume that this
+  level can be mapped to more specific types of businesses internally by If. In a future version
+  of this model, the model could input more granular groups of ~ActivityCode~ to potentially improve 
+  the performance of the model.
+
+  The variable groups and corresponding estimated risk factors are presented in Table \ref{tab:risk_groups}.
+  For each sub-question in the Levelling assignment we got the following results
+
+  1. The total expected cost for 2017 would be 170033.9 kr.
+  2. The total premium would be 188926.6 kr, and 
+  3. Mapping the risk factors to each respective tariff cell and calculating $\gamma_0$ we got
+
+     \[
+     \gamma_0 = 238.8046
+     \]
+
+  In order to evaluate our model we used the Akaike Information Criterion (AIC). Considering e.g. 
+  the qualitative importance of the age of the insured tractors when estimating the claim severity, we decided to test 
+  whether leaving out this predictor would reduce the predictive performance of the model. The results 
+  of this evaluation are presented in Table \ref{tab:performance_table}. The AIC was lower for the both models 
+  when keeping the ~VehicleAge_group~ predictor, hence we conclude that this predictor should be included in
+  the model.
+
+  A more exhaustive and thorough way of evaluating the model would have been to run all-possible regression 
+  with AIC in order to evaluate the importance of the other predictors. This, however, is left 
+  for a future analysis.
 
   \input{../risk_groups.tex}
+   
+  \input{../performance_table.tex}
 
 * Conclusion
-* Appendix A
+
+  For each sub-question in the Levelling assignment we found that
+
+  1. The total expected cost for 2017 would be 170033.9 kr.
+  2. The total premium would be 188926.6 kr, and 
+  3. $\gamma_0 = 238.8046$
+
+
+  
