@@ -100,17 +100,18 @@ Examiner \par
       The estimated claim cost for the coming year is then simply the sum of all of the estimated yearly 
       claim costs for each tariff cell.
 
-   2. Recall first that the /If P&C/ has a ratio target of 0.9 between the estimated claim cost and the total premium.
+   2. Recall first that /If P&C/ has a ratio target of 0.9 between the estimated claim cost and the total premium.
       Using that the total premium is $P = \sum_i p_i$, where $p_i$ is the premium or price for tariff cell $i$ defined 
       in ([[eq:1]]), and the total expected yearly cost is $C = \sum_i c_i$, where $c_i$ is the expected yearly cost 
-      for tariff cell $i$, we get
+      for tariff cell $i$, we can write the ratio target as
 
       #+NAME: eq:2
       \begin{equation}
 	\frac{C}{P} = 0.9 
       \end{equation}
 
-      Using that we have an estimated value for the total expected claim cost, we reorder the equation to get
+      From the data, we estimate a value for the total expected claim cost. Therefore we can solve for 
+      $P$ by reordering ([[eq:2]])
       
       #+NAME: eq:3
       \begin{equation}
@@ -133,17 +134,17 @@ Examiner \par
 
       #+NAME: eq:5
       \begin{equation}
-      \frac{C}{0.9} = \gamma_0 \sum_i \bigg ( \prod_{k = 1}^M \gamma_{j,k} \bigg) \implies \frac{C}{\sum_i \bigg ( \prod_{k = 1}^M \gamma_{j,k} \bigg)_i} = \gamma_0
+      \frac{C}{0.9} = \gamma_0 \sum_i \bigg ( \prod_{k = 1}^M \gamma_{j,k} \bigg)_i \iff \frac{C}{0.9 \sum_i \bigg ( \prod_{k = 1}^M \gamma_{j,k} \bigg)_i} = \gamma_0
       \end{equation}
 
       In other words: Row by row in the aggregated data, we map the row characteristics to the
       corresponding risk factor  in the group factor table, and subsequently take the product of all 
       the risk factors to obtain the total risk factor for that tariff cell. By ([[eq:5]]), we obtain the 
-      base level $\gamma_0$ by dividing the total expected cost by the sum of all total risk factors.
+      base level $\gamma_0$ by dividing the total expected cost by the sum of the total risk factors.
 
 * Results
 
-  We adjusted the data slightly to adjust for some odd rows. The rows with $\texttt{Duration} = 0$ were removed. 
+  We changed the data slightly to adjust for some odd rows. The rows with $\texttt{Duration} = 0$ were removed. 
   Since we are interested in the tractors that has been exposed to risk, and the tractors where 
   $\texttt{Duration} = 0$ make up a small fraction of the total data, we decided to remove these rows. 
 
@@ -152,23 +153,24 @@ Examiner \par
   a large impact on the results. However, since many 
   of these rows correspond to a particular ActivityCode (namely Middle H - Hotels and restaurants), 
   we believe that we are missing the contextual dimensions needed to decide whether these should be counted 
-  as wrong inputs in the dataset. In the end we decided to leave them in the data as a part of the
+  as wrong inputs in the dataset. 
+
+  In the end we decided to leave them in the data as a part of the
   group < 1000. An alternative would have been to include those rows as a separate level, however in that case the risk factor
   corresponding to this level would have been inflated (since tariff cells with low duration and one or two
-  claims would have resulted in a high predicted claim frequency, and therefore an inflated risk), which 
-  is undesirable.
+  claims would have resulted in a high predicted claim frequency, and therefore an inflated risk).
    
   In the exploratory analysis of the data, we identified the use of "Other" as a factor level to ~ActivityCode~. 
-  We assume that this level can be mapped to more specific types of businesses internally by If. In a future version
+  We assume that this level can be mapped to more specific types of businesses internally by /If P&C/. In a future version
   of this model, the model could input more granular groups of ~ActivityCode~ to potentially improve 
   the performance of the model.
 
   The variable groups and corresponding estimated risk factors are presented in Table \ref{tab:risk_groups}.
   For each sub-question in the Levelling assignment we got the following results
 
-  1. The total expected cost for 2017 would be 170033.9 kr.
-  2. The total premium would be 188926.6 kr, and 
-  3. Mapping the risk factors to each respective tariff cell and calculating $\gamma_0$ we got
+  1. The total expected cost for 2017 was 170033.9 kr.
+  2. The total premium was 188926.6 kr, and 
+  3. The base level $\gamma_0$ was
 
      \[
      \gamma_0 = 238.8046

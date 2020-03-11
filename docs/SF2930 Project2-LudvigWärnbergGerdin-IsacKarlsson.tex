@@ -1,4 +1,4 @@
-% Created 2020-03-11 Wed 18:02
+% Created 2020-03-11 Wed 18:12
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -52,15 +52,15 @@ Examiner \par
 \newpage
 
 \section{Introduction}
-\label{sec:orgddeb738}
+\label{sec:org9c3634d}
 \subsection{Background}
-\label{sec:org4fb220e}
+\label{sec:orgc804bdf}
 Most of the tractors in Sweden have a third party liability insurance, because they are required by law. 
 In southern Europe a few large players have dominated the sales of tractor insurances. Our main task this
 project is to create our own tractor tariff. The price \(p_i\) for tariff cell \(i\) is defined as
 
 \begin{equation}
-\label{eq:org0b2006c}
+\label{eq:orga38b748}
   p_i = \gamma_0 \prod_{k = 1}^M \gamma_{k,j}   
 \end{equation}
 
@@ -70,7 +70,7 @@ number \(k = 1\) and letting a particular variable group \(\texttt{VehicleAge} <
 then the risk factor for the \texttt{VehicleAge} of a tractor that is 1 year old would be \(\gamma_{12}\).
 
 \subsection{Data}
-\label{sec:orgd799e61}
+\label{sec:org95ab4ff}
 
 \emph{If P\&C} have provided us with data to train this price model, example given in the Table 1.
 
@@ -91,24 +91,24 @@ RiskYear & VehicleAge & Weight & Climate & ActivityCode & Duration & NoOfClaims 
 \end{table}
 
 \subsection{Problem description}
-\label{sec:org10a535c}
+\label{sec:org0eafd7c}
 \subsubsection{Risk Differentiation and Grouping}
-\label{sec:orga82b7b2}
+\label{sec:org9fc73a1}
 
 Using GLM analysis we aim to make each group “Risk homogeneous” and that they contain enough data to
 get a stable GLM analysis, meanwhile handling imperfections in the dataset.
 
 \subsubsection{Levelling}
-\label{sec:orgcdc8322}
+\label{sec:org7184402}
 
 Here we aim to calculate \(\gamma_0\) such that the forecasted claim costs for each insurance are covered by the
 the price for each insurance on a full year basis. We use a ratio between the estimated claim cost and
-the total premium of 90\%. Lastly we calculate the base level \(\gamma_0\) from the formula given in (\ref{eq:org0b2006c})
+the total premium of 90\%. Lastly we calculate the base level \(\gamma_0\) from the formula given in (\ref{eq:orga38b748})
 
 \section{Methods and Methodological Considerations}
-\label{sec:org9ca4c37}
+\label{sec:org6086c27}
 \subsection{Grouping and Risk Differentiation}
-\label{sec:org5cb8f4b}
+\label{sec:org97e2962}
 
 The criteria on which we based our grouping was
 
@@ -119,12 +119,12 @@ The criteria on which we based our grouping was
 Greater emphasis were placed on fulfilling criteria 2) due to it being more concrete. In order to do that
 we choose cut-offs that placed a fairly equal shares of data in each risk group. 
 
-The resulting cut-offs and risk groups are found in section \ref{sec:orgeda6ed5}.
+The resulting cut-offs and risk groups are found in section \ref{sec:orgac751e5}.
 
 \subsection{Levelling}
-\label{sec:orga762c5e}
+\label{sec:org46697c9}
 
-From the results of section \ref{sec:org5cb8f4b}, we get risk factor estimates for each
+From the results of section \ref{sec:org97e2962}, we get risk factor estimates for each
 level of each predictor. These are henceforth referred to as the "group factors".
 
 For each corresponding sub-assignment presented under Levelling in the project description, we conducted the
@@ -143,52 +143,53 @@ yearly cost, even if the insurances had not been active for all of 2016.
 The estimated claim cost for the coming year is then simply the sum of all of the estimated yearly 
 claim costs for each tariff cell.
 
-\item Recall first that the \emph{If P\&C} has a ratio target of 0.9 between the estimated claim cost and the total premium.
+\item Recall first that \emph{If P\&C} has a ratio target of 0.9 between the estimated claim cost and the total premium.
 Using that the total premium is \(P = \sum_i p_i\), where \(p_i\) is the premium or price for tariff cell \(i\) defined 
-in (\ref{eq:org0b2006c}), and the total expected yearly cost is \(C = \sum_i c_i\), where \(c_i\) is the expected yearly cost 
-for tariff cell \(i\), we get
+in (\ref{eq:orga38b748}), and the total expected yearly cost is \(C = \sum_i c_i\), where \(c_i\) is the expected yearly cost 
+for tariff cell \(i\), we can write the ratio target as
 
 \begin{equation}
-\label{eq:org8ea1b81}
+\label{eq:org88a3b65}
   \frac{C}{P} = 0.9 
 \end{equation}
 
-Using that we have an estimated value for the total expected claim cost, we reorder the equation to get
+From the data, we estimate a value for the total expected claim cost. Therefore we can solve for 
+\(P\) by reordering (\ref{eq:org88a3b65})
 
 \begin{equation}
-\label{eq:orgcd30904}
+\label{eq:org5932b2c}
 \frac{C}{P} = 0.9 \iff \frac{C}{0.9} = P
 \end{equation}
 
-\item The formula for the price of tariff cell \(i\) is defined in (\ref{eq:org0b2006c}). As a reminder, this was
+\item The formula for the price of tariff cell \(i\) is defined in (\ref{eq:orga38b748}). As a reminder, this was
 
 \[
       p_i = \gamma_0 \prod_{k = 1}^M \gamma_{k,j}
       \]
 
-Inserting (\ref{eq:org0b2006c}) into the formula for the total premium we get
+Inserting (\ref{eq:orga38b748}) into the formula for the total premium we get
 
 \begin{equation}
-\label{eq:orgb47fab5}
+\label{eq:org5bc8644}
 P = \sum_i p_i = \sum_i \bigg (\gamma_0 \prod_{k = 1}^M \gamma_{j,k} \bigg)_i =  \gamma_0 \sum_i \bigg ( \prod_{k = 1}^M \gamma_{j,k} \bigg)
 \end{equation}
-and subsequently inserting (\ref{eq:orgb47fab5}) into (\ref{eq:orgcd30904}) and solving for \(\gamma_0\) 
+and subsequently inserting (\ref{eq:org5bc8644}) into (\ref{eq:org5932b2c}) and solving for \(\gamma_0\) 
 
 \begin{equation}
-\label{eq:org290028b}
-\frac{C}{0.9} = \gamma_0 \sum_i \bigg ( \prod_{k = 1}^M \gamma_{j,k} \bigg) \implies \frac{C}{\sum_i \bigg ( \prod_{k = 1}^M \gamma_{j,k} \bigg)_i} = \gamma_0
+\label{eq:orgcbb00bb}
+\frac{C}{0.9} = \gamma_0 \sum_i \bigg ( \prod_{k = 1}^M \gamma_{j,k} \bigg)_i \iff \frac{C}{0.9 \sum_i \bigg ( \prod_{k = 1}^M \gamma_{j,k} \bigg)_i} = \gamma_0
 \end{equation}
 
 In other words: Row by row in the aggregated data, we map the row characteristics to the
 corresponding risk factor  in the group factor table, and subsequently take the product of all 
-the risk factors to obtain the total risk factor for that tariff cell. By (\ref{eq:org290028b}), we obtain the 
-base level \(\gamma_0\) by dividing the total expected cost by the sum of all total risk factors.
+the risk factors to obtain the total risk factor for that tariff cell. By (\ref{eq:orgcbb00bb}), we obtain the 
+base level \(\gamma_0\) by dividing the total expected cost by the sum of the total risk factors.
 \end{enumerate}
 
 \section{Results}
-\label{sec:orgeda6ed5}
+\label{sec:orgac751e5}
 
-We adjusted the data slightly to adjust for some odd rows. The rows with \(\texttt{Duration} = 0\) were removed. 
+We changed the data slightly to adjust for some odd rows. The rows with \(\texttt{Duration} = 0\) were removed. 
 Since we are interested in the tractors that has been exposed to risk, and the tractors where 
 \(\texttt{Duration} = 0\) make up a small fraction of the total data, we decided to remove these rows. 
 
@@ -197,14 +198,15 @@ Since the fraction of rows with \(\texttt{Weight} = 0\) were small (0.02\%), rem
 a large impact on the results. However, since many 
 of these rows correspond to a particular ActivityCode (namely Middle H - Hotels and restaurants), 
 we believe that we are missing the contextual dimensions needed to decide whether these should be counted 
-as wrong inputs in the dataset. In the end we decided to leave them in the data as a part of the
+as wrong inputs in the dataset. 
+
+In the end we decided to leave them in the data as a part of the
 group < 1000. An alternative would have been to include those rows as a separate level, however in that case the risk factor
 corresponding to this level would have been inflated (since tariff cells with low duration and one or two
-claims would have resulted in a high predicted claim frequency, and therefore an inflated risk), which 
-is undesirable.
+claims would have resulted in a high predicted claim frequency, and therefore an inflated risk).
 
 In the exploratory analysis of the data, we identified the use of "Other" as a factor level to \texttt{ActivityCode}. 
-We assume that this level can be mapped to more specific types of businesses internally by If. In a future version
+We assume that this level can be mapped to more specific types of businesses internally by \emph{If P\&C}. In a future version
 of this model, the model could input more granular groups of \texttt{ActivityCode} to potentially improve 
 the performance of the model.
 
@@ -212,9 +214,9 @@ The variable groups and corresponding estimated risk factors are presented in Ta
 For each sub-question in the Levelling assignment we got the following results
 
 \begin{enumerate}
-\item The total expected cost for 2017 would be 170033.9 kr.
-\item The total premium would be 188926.6 kr, and
-\item Mapping the risk factors to each respective tariff cell and calculating \(\gamma_0\) we got
+\item The total expected cost for 2017 was 170033.9 kr.
+\item The total premium was 188926.6 kr, and
+\item The base level \(\gamma_0\) was
 
 \[
      \gamma_0 = 238.8046
@@ -237,7 +239,7 @@ for a future analysis.
 \input{../performance_table.tex}
 
 \section{Conclusion}
-\label{sec:org4d31ed1}
+\label{sec:org6cf4de3}
 
 For each sub-question in the Levelling assignment we found that
 
