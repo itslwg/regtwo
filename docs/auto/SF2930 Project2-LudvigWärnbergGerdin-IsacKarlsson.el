@@ -6,12 +6,12 @@
    (TeX-add-to-alist 'LaTeX-provided-package-options
                      '(("inputenc" "utf8") ("fontenc" "T1") ("ulem" "normalem") ("geometry" "margin=1.25in")))
    (add-to-list 'LaTeX-verbatim-environments-local "minted")
-   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "path")
-   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "url")
-   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "nolinkurl")
-   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "hyperbaseurl")
-   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "hyperimage")
    (add-to-list 'LaTeX-verbatim-macros-with-braces-local "hyperref")
+   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "hyperimage")
+   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "hyperbaseurl")
+   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "nolinkurl")
+   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "url")
+   (add-to-list 'LaTeX-verbatim-macros-with-braces-local "path")
    (add-to-list 'LaTeX-verbatim-macros-with-delims-local "path")
    (TeX-run-style-hooks
     "latex2e"
@@ -40,22 +40,22 @@
     "bookmark"
     "tabularx")
    (LaTeX-add-labels
-    "sec:org22b96bb"
-    "sec:org313190c"
-    "eq:org35c57d9"
-    "sec:orgf3e4d02"
-    "sec:orgd94dd07"
-    "sec:orgb2d8a15"
-    "sec:orga360034"
-    "sec:org7f03a32"
-    "sec:orgfdd43b7"
-    "sec:org9d5918c"
-    "eq:org1ef599b"
-    "eq:org9560e4e"
-    "eq:org94102db"
-    "eq:org90cf640"
-    "sec:org75bcc31"
-    "sec:org28364f7")
+    "sec:org136b02b"
+    "sec:org13e0b17"
+    "eq:orgf83f1f4"
+    "sec:org94bf999"
+    "sec:org203659f"
+    "sec:orgbefb16a"
+    "sec:org995a514"
+    "sec:orgce3c068"
+    "sec:orgc57fe0b"
+    "sec:orgb763a92"
+    "eq:org5676fb9"
+    "eq:org8bb025c"
+    "eq:org4a58580"
+    "eq:org879f97e"
+    "sec:orgc277d6e"
+    "sec:org4776bc7")
    (LaTeX-add-amsthm-newtheorems
     "definition"))
  :latex)

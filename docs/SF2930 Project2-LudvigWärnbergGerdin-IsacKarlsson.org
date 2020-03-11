@@ -37,7 +37,7 @@ Examiner \par
   Here \gamma_0 corresponds to the base level and $\gamma_{k,j}$ are the risk factors for variable $k$ and 
   variable group $j$. For example, letting the variable \texttt{VehicleAge} correspond to variable 
   number $k = 1$ and letting a particular variable group $\texttt{VehicleAge} < 2$ correspond to $j = 2$, 
-  then the risk factor for the ~VehicleAge~ of a tractor that is 1 year old would be $\gamma_{12}$l
+  then the risk factor for the ~VehicleAge~ of a tractor that is 1 year old would be $\gamma_{12}$.
 
 ** Data
 
@@ -143,10 +143,9 @@ Examiner \par
 
 * Results
 
-  We adjusted the data slightly to adjust for some odd rows. 
-  Moreover, the rows with where $\texttt{Duration} = 0$ were removed. Since we are interested in the tractors
-  that has been exposed to risk, and the tractors where $\texttt{Duration} = 0$ make up a small fraction
-  of the total data, we decided to remove these rows. 
+  We adjusted the data slightly to adjust for some odd rows. The rows with $\texttt{Duration} = 0$ were removed. 
+  Since we are interested in the tractors that has been exposed to risk, and the tractors where 
+  $\texttt{Duration} = 0$ make up a small fraction of the total data, we decided to remove these rows. 
 
   We noted that some rows had suspiciously low values for the \texttt{Weight} predictor, e.g. a weight of 0. 
   Since the fraction of rows with $\texttt{Weight} = 0$ were small (0.02%), removing the rows would not have
@@ -158,8 +157,8 @@ Examiner \par
   corresponding to this level would have been inflated (since a claim on a small duration on would have resulted
   in a predicted claim frequency), which is undesirable.
    
-  As an other note we identified the use of Other as a factor level to ~ActivityCode~. We assume that this
-  level can be mapped to more specific types of businesses internally by If. In a future version
+  In the exploratory analysis of the data, we identified the use of "Other" as a factor level to ~ActivityCode~. 
+  We assume that this level can be mapped to more specific types of businesses internally by If. In a future version
   of this model, the model could input more granular groups of ~ActivityCode~ to potentially improve 
   the performance of the model.
 
